@@ -1,0 +1,15 @@
+#1
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package.json .
+RUN npm install 
+
+COPY . .
+RUN npm run build
+
+#2           (jst to reduce the image size for unneccessary cache)
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=builder /app/ .
+EXPOSE 81
+CMD ["npm","run","dev"]
