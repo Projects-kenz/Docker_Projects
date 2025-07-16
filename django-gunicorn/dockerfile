@@ -1,0 +1,23 @@
+#1
+FROM python:3.11-alpine AS builder
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --prefix=/install/deps --no-cache-dir -r requirements.txt 
+
+COPY ./mysite .
+
+
+
+
+ #2
+FROM python:3.11-slim
+WORKDIR /app
+COPY --from=builder /app .
+COPY --from=builder /install/deps/ /usr/local
+
+COPY migrate-collectstatic.sh /app/migrate-collectstatic.sh
+RUN chmod +x /app/migrate-collectstatic.sh
+
+ENTRYPOINT ["/app/migrate-collectstatic.sh"]
+EXPOSE 8000
+CMD ["gunicorn","mysite.wsgi:application", "--bind","0.0.0.0:8000"]

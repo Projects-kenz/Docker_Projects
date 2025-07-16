@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <title>Django Page</title>
+    <link rel="stylesheet" href="{% static 'app1/style.css' %}">
+</head>
+<body>
+    <h1>Hello from Django HTML</h1>
+    <button onclick="showAlert()">Click me</button>
+
+    <script src="{% static 'app1/script.js' %}"></script>
+</body>
+</html>

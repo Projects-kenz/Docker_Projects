@@ -1,0 +1,39 @@
+version: "3.9"
+
+services: 
+  django:
+     build: 
+       context: ./
+     container_name: django1
+     ports: 
+       - 8000:8000
+     volumes: 
+       - static_data:/app/static_files
+     #depends_on: 
+      # - db
+
+  nginx:
+    build:
+      context: ./nginx
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes: 
+      - static_data:/static_files
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    depends_on: 
+      - django
+
+
+ # db:
+  #  image: postgres:14
+   # environment:
+    #  POSTGRES_DB: mydb
+     # POSTGRES_USER: postgres
+      #POSTGRES_PASSWORD: postgres
+
+volumes:
+  static_data:
+
+
+
